@@ -1,10 +1,24 @@
 #pragma once
 #include <stdint.h>
 
+struct PfnList;
+class Driver_Exploit {
+public:
+	Driver_Exploit();
+	~Driver_Exploit();
+private:
+	SFMemoryInfo myRanges[32] = { 0 };
+	PfnList* pfnTable = nullptr;
+	int nOfRange = 0;
+	void patch(bool bPatch);
+	uint64_t physmem_object_header;
+	HANDLE hDriver;
+};
+
 class MemoryIO;
 class PhysicalMemoryWrapper {
 public:
-	PhysicalMemoryWrapper();
+	PhysicalMemoryWrapper(bool bUseHardcoded = false);
 	~PhysicalMemoryWrapper();
 
 	bool isInRam(uint64_t address, uint32_t len);
@@ -21,6 +35,7 @@ public:
 	uint64_t HideEProcess(int pid);
 	bool UnHideEProcess(uint64_t hidden_process);
 	uint64_t GetKernelDirBase();
+	bool change_pid(int pid, uint64_t eprocess);
 
 	template <typename T>
 	T SPread(uint64_t address);
@@ -87,6 +102,7 @@ public:
 	PVOID map(uint64_t va, uint32_t size); //get mapped pointer(for fast memory access).
 	uint64_t get_process_base() const { return cached_process_base_address; };
 	bool grant_handle_access(HANDLE handle, ACCESS_MASK access_rights);
+	bool change_pid(int inewpid);
 private:
 	PHANDLE_TABLE_ENTRY ExpLookupHandleTableEntry(PHANDLE_TABLE HandleTable, ULONGLONG Handle);
 	uint64_t cached_process_dir_base = 0, cached_process_base_address = 0, cached_eprocess = 0;
