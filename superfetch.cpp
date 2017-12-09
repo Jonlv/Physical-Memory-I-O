@@ -4,6 +4,7 @@
 #include "SuperfetchNative.h"
 #include <Windows.h>
 #include <memory>
+
 #pragma warning(default:4005)
 #pragma warning(default:4200)
 
@@ -147,6 +148,7 @@ uint64_t SFGetNtBase()
 	return 0;
 }
 
+/*
 uint64_t SFGetWin32kBase()
 {
 	return SFGetModuleBase("win32k.sys");
@@ -156,6 +158,8 @@ uint64_t SFGetHalBase()
 {
 	return SFGetModuleBase("hal.sys");
 }
+*/
+
 
 uint64_t SFGetModuleBase(char* module)
 {
